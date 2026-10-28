@@ -1,0 +1,20 @@
+{
+  "name": "realtime-taskboard",
+  "version": "1.0.0",
+  "description": "Production-quality Real-Time Team Task Board (Kanban) with strict concurrency safety and Pastel Dreamy Kawaii aesthetic",
+  "type": "module",
+  "scripts": {
+    "start": "node server/src/server.js",
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "migrate": "cd server && npm run migrate",
+    "seed": "cd server && npm run seed",
+    "test:server": "cd server && npm test",
+    "test:client": "cd client && npm test",
+    "test": "npm run test:server && npm run test:client",
+    "build": "cd client && npm run build"
+  },
+  "keywords": ["kanban", "realtime", "socket.io", "react", "concurrency", "kawaii"],
+  "author": "",
+  "license": "ISC"
+}

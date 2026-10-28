@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-sky-light: #DCEBFA;
+    --color-sky-dark: #BFD7F3;
+    --color-cream: #FFF3C4;
+    --color-cream-light: #FFFBF0;
+    --color-white: #F8F8FB;
+    --color-pink: #F7CADA;
+    --color-periwinkle: #8FA8E8;
+    --color-yellow: #FFD966;
+    --color-cocoa: #7A5A50;
+    --color-slate: #4E5868;
+    --font-heading: 'Comfortaa', cursive, system-ui, sans-serif;
+    --font-body: 'Nunito', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: var(--color-white);
+    color: var(--color-slate);
+    background-image: radial-gradient(rgba(191, 215, 243, 0.45) 1.5px, transparent 1.5px);
+    background-size: 24px 24px;
+    background-attachment: fixed;
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, .font-heading {
+    font-family: var(--font-heading);
+    color: var(--color-cocoa);
+  }
+}
+
+/* Custom Kawaii Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(220, 235, 250, 0.3);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb {
+  background: #BFD7F3;
+  border-radius: 9999px;
+  border: 2px solid #F8F8FB;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #8FA8E8;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Safe area insets for mobile */
+.pb-safe {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+.pt-safe {
+  padding-top: max(1rem, env(safe-area-inset-top));
+}
+
+/* Focus styles */
+.kawaii-focus {
+  @apply outline-none focus-visible:ring-4 focus-visible:ring-[#8FA8E8]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F8F8FB];
+}
+
