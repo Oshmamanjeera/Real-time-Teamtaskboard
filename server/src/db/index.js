@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import pg from 'pg';
 import path from 'path';
 import fs from 'fs';
@@ -16,7 +17,7 @@ export async function getDb() {
 
   const databaseUrl = process.env.DATABASE_URL;
 
-  if (databaseUrl && !process.env.FORCE_PGLITE) {
+  if (databaseUrl && process.env.FORCE_PGLITE !== 'true') {
     try {
       const { Pool } = pg;
       const pool = new Pool({ connectionString: databaseUrl });
@@ -56,6 +57,9 @@ export async function getDb() {
         return poolInstance;
       }
     } catch (err) {
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error('PostgreSQL connection failed: ' + err.message);
+      }
       console.warn('PostgreSQL connection failed, falling back to embedded PGlite:', err.message);
     }
   }
@@ -63,7 +67,7 @@ export async function getDb() {
   // Fallback / default: Embedded PGlite
   isPgLite = true;
   const { PGlite } = await import('@electric-sql/pglite');
-  
+
   let dbPath;
   if (process.env.NODE_ENV === 'test' && !process.env.PERSIST_TEST_DB) {
     dbPath = undefined; // in-memory
@@ -75,7 +79,7 @@ export async function getDb() {
   }
 
   const pglite = new PGlite(dbPath);
-  
+
   // Wrap pglite to match standard pg client / pool interface
   pgliteInstance = {
     isPgLite: true,
@@ -102,7 +106,7 @@ export async function getDb() {
             fields: res.fields
           };
         },
-        release: () => {}
+        release: () => { }
       };
     },
     end: async () => {
