@@ -27,9 +27,10 @@ export function SocketProvider({ children }) {
       return;
     }
 
-    const newSocket = io('/', {
+    const newSocket = io(import.meta.env.VITE_SOCKET_URL || undefined, {
       auth: { token: accessToken },
       transports: ['websocket', 'polling'],
+      withCredentials: true,
       autoConnect: true,
       reconnection: true,
       reconnectionAttempts: Infinity,
