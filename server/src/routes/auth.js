@@ -31,10 +31,14 @@ const loginSchema = z.object({
   password: z.string().min(1, 'Password is required'),
 });
 
+const isProduction = config.NODE_ENV === 'production';
+
 const cookieOptions = {
   httpOnly: true,
-  secure: config.NODE_ENV === 'production',
-  sameSite: 'lax',
+  secure: isProduction,          // HTTPS only in production
+  // Cross-site cookies require sameSite:'none' + secure:true when the client
+  // (Vercel) and server (Render) are on different domains.
+  sameSite: isProduction ? 'none' : 'lax',
   path: '/',
 };
 

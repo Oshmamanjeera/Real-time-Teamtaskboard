@@ -19,25 +19,22 @@ import { notFoundHandler, errorHandler } from './middleware/error.js';
 export function createApp() {
   const app = express();
 
+  // Trust the first reverse-proxy hop (required on Render / Vercel / Heroku
+  // for accurate req.ip, secure cookies, and rate-limiting by real IP).
+  app.set('trust proxy', 1);
+
   // Security headers with Helmet
   app.use(helmet({
     crossOriginResourcePolicy: { policy: 'cross-origin' },
   }));
 
-  // CORS restricted to configured frontend origin
-  const allowedOrigins = [
-    config.CLIENT_ORIGIN,
-    'http://localhost:5173',
-    'http://127.0.0.1:5173',
-    'http://localhost:5000',
-    'http://127.0.0.1:5000',
-    'http://localhost:3000',
-  ].filter(Boolean);
-
+  // CORS restricted to CLIENT_ORIGIN only (set this env var on Render to your
+  // Vercel production URL, e.g. https://your-app.vercel.app).
+  // In development the env var defaults to http://localhost:5173 (see config.js).
   app.use(cors({
     origin: (origin, callback) => {
-      // allow requests with no origin (like mobile apps, curl, supertest)
-      if (!origin || allowedOrigins.includes(origin)) {
+      // allow requests with no origin (mobile apps, curl, supertest)
+      if (!origin || origin === config.CLIENT_ORIGIN) {
         return callback(null, true);
       }
       return callback(new Error('CORS policy: Not allowed by CORS'));

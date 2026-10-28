@@ -10,19 +10,11 @@ import { config } from './config.js';
 const boardPresence = new Map();
 
 export function setupSocketIO(httpServer) {
-  const allowedOrigins = [
-    config.CLIENT_ORIGIN,
-    'http://localhost:5173',
-    'http://127.0.0.1:5173',
-    'http://localhost:5000',
-    'http://127.0.0.1:5000',
-    'http://localhost:3000',
-  ].filter(Boolean);
-
+  // CORS restricted to CLIENT_ORIGIN only — same policy as Express CORS above.
   const io = new Server(httpServer, {
     cors: {
       origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
+        if (!origin || origin === config.CLIENT_ORIGIN) {
           return callback(null, true);
         }
         return callback(new Error('CORS not allowed for Socket.IO'));
